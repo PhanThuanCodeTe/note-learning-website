@@ -29,5 +29,7 @@ Khi tạo project mới xong trên góc trên màn hình sẽ có nút connect b
 - Cài tiếp các thư viện cần thiết cho việc login
 > npm install @nestjs/jwt @nestjs/passport passport passport-jwt
 > npm install --save-dev @types/passport-jwt
+> npm install @nestjs/passport passport passport-jwt @nestjs/jwt bcrypt
+> npm install -D @types/passport-jwt @types/bcrypt
 - Tạo file config cho JWT trong thư mục config
 - Cấu hình JWT trong AppModule

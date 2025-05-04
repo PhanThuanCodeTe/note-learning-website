@@ -12,6 +12,11 @@ export class UsersService {
         private readonly userRepository: Repository<User>,
       ) {}
 
+      async findOneByEmail(email: string): Promise<User | undefined> {
+        const user = await this.userRepository.findOne({ where: { email } });
+        return user || undefined;
+      }
+
       async createUser(createUserDto: CreateUserDto): Promise<User> {
         const { email, password, full_name, avatar_url } = createUserDto; // destructure the dto to get the values
 
