@@ -18,8 +18,6 @@ import { JwtModule } from '@nestjs/jwt';
       useFactory: (configService: ConfigService) => {
         const secret = configService.get<string>('JWT_SECRET');
         const expiresIn = configService.get<string>('JWT_EXPIRES_IN') || '1d';
-        console.log('JWT_SECRET in AuthModule:', secret); // Debug
-        console.log('JWT_EXPIRES_IN in AuthModule:', expiresIn); // Debug
         if (!secret) {
           throw new Error('JWT_SECRET is not defined');
         }

@@ -19,14 +19,13 @@ export class UsersController {
     return this.usersService.createUser(createUserDto); // call service to create a new user
   }
 
-  @Get('info')
+  @Get('info') // define endpoint
   async getInfo(@Request() req) {
-    const user = await this.usersService.findOneByEmail(req.user.email);
+    const user = await this.usersService.findOneByEmail(req.user.email); // get user from request object
     if (!user) {
-      throw new UnauthorizedException('Người dùng không tồn tại');
+      throw new UnauthorizedException('User not found');
     }
     return {
-      id: user.id,
       email: user.email,
       full_name: user.full_name,
       avatar_url: user.avatar_url,

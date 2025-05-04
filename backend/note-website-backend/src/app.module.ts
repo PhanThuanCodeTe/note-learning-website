@@ -25,14 +25,13 @@ import { JwtMiddleware } from './auth/jwt.middleware';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const secret = configService.get('jwt.secret');
-        console.log('JWT_SECRET:', secret);
         if (!secret) {
           throw new Error('JWT_SECRET is not defined in configuration');
         }
         return {
           secret,
           signOptions: {
-            expiresIn: configService.get('jwt.expiresIn') || '1d',
+            expiresIn: configService.get('jwt.expiresIn'),
           },
         };
       },

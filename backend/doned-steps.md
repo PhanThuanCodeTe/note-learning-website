@@ -26,10 +26,21 @@ Khi tạo project mới xong trên góc trên màn hình sẽ có nút connect b
 > npm install bcrypt
 > npm install --save-dev @types/bcrypt
 - Chỉnh sửa lại hàm create trong service
-- Cài tiếp các thư viện cần thiết cho việc login
-> npm install @nestjs/jwt @nestjs/passport passport passport-jwt
-> npm install --save-dev @types/passport-jwt
-> npm install @nestjs/passport passport passport-jwt @nestjs/jwt bcrypt
-> npm install -D @types/passport-jwt @types/bcrypt
-- Tạo file config cho JWT trong thư mục config
-- Cấu hình JWT trong AppModule
+## Xác thực JWT
+- Cài đặt package
+> npm install @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt @nestjs/config @nestjs/typeorm typeorm
+- Thêm vào cuối file .env
+- Cài đặt module auth
+> nest generate module auth
+> nest generate controller auth
+> nest generate service auth
+- Sửa file **app.module.ts**
+- Tạo file cấu hình JWT **/config/jwt.config.ts**
+- Sửa file **auth.module.ts**
+- Sửa file **auth.service.ts**
+- Tạo file **/auth/jwt.strategy.ts**
+- Sửa file **auth.controller.ts**
+- Sửa các file liên quan.
+
+
+
