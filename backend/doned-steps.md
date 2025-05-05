@@ -39,3 +39,22 @@ Tôi muốn api trả về phải đẹp mắt nên tôi cực, và bạn cũng 
     - **http-exception.filter.ts**: Bắt và định dạng các lỗi HTTP (như HttpException) thành response chuẩn { success: false, message, response } để đảm bảo xử lý lỗi thống nhất.
     - **response.interceptor.ts**: Tự động gói dữ liệu trả về của các API vào định dạng **ApiResponse**, áp dụng message mặc định nếu service không cung cấp response mẫu.
     ##### Lưu ý nhớ call trong main để gọi cục bộ toàn ứng dụng nhé!
+## Vấn đề tiếp theo nè ứng dụng chưa nhận formdata và chưa upload avatar :)
+- Cài tiếp thư viện cần thiết của cloundinary, platform-express, ...
+> npm install cloudinary @nestjs/platform-express multer
+> npm install @types/multer --save-dev
+- Tạo file cấu hình cloudinary trong thư mục **config**.
+- Thêm các key vào **.env**.
+- Tạo module cloundiary. Dùng lệnh này để tự động cập nhật module cloudinary trên **app.module** nếu không tự động thêm vào, bạn tự thêm đi!
+> nest g module cloudinary 
+- Tạo util cho avatar mặc định (Tôi muốn khi người dùng không send avatar thì sẽ có 1 url avatar mặc định)
+- Cập nhật controller để xử lý avatar (bạn chọn file mà nên phải dùng form data thôi)
+- Cập nhật **user.module** để sử dụng **cloudinary.module**.
+- Thư mục uploads để nhận và chuyển ảnh lên cloudinary. sao đó có util xóa file tạm.
+
+
+
+
+
+
+

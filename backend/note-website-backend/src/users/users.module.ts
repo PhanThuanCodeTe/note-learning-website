@@ -3,9 +3,10 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../common/entities/user.entity';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])], // import the User entity
+  imports: [TypeOrmModule.forFeature([User]), CloudinaryModule], // import the User entity
   controllers: [UsersController],
   providers: [UsersService]
 })
