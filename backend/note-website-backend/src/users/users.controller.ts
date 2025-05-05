@@ -1,13 +1,14 @@
 import { Controller, Body, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ApiResponse } from 'src/common/utils/response.util';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-    @Post('register') // define endpoint
-    async register(@Body() createUserDto: CreateUserDto) { // use async to handle request, dto to validate request body
-        return this.usersService.createUser(createUserDto); // call service to create a new user
-    }
+  @Post('register')
+  async register(@Body() createUserDto: CreateUserDto): Promise<ApiResponse> {
+    return this.usersService.createUser(createUserDto);
+  }
 }

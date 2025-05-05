@@ -21,13 +21,21 @@ Khi tạo project mới xong trên góc trên màn hình sẽ có nút connect b
 > nest generate controller users
 > nest generate service users
 10. sao khi cài đặt tạo các hàm cho service và kêu controller gọi nó **Nhớ check app.module.ts xem có import module của mình chưa**
-## Hash password cho user sử dụng bcrypt và login cho user sử dụng JWT
+## Hash password cho user sử dụng bcrypt
 - Cài đặt thư viện cần thiết
 > npm install bcrypt
 > npm install --save-dev @types/bcrypt
 - Chỉnh sửa lại hàm create trong service
-- Cài tiếp các thư viện cần thiết cho việc login
-> npm install @nestjs/jwt @nestjs/passport passport passport-jwt
-> npm install --save-dev @types/passport-jwt
-- Tạo file config cho JWT trong thư mục config
-- Cấu hình JWT trong AppModule
+## Ngựa time*
+Tôi muốn api trả về phải đẹp mắt nên tôi cực, và bạn cũng thế nhé :>
+- API trả về sẽ như sau:
+> {
+    "success": true/false,
+    "message": "mesage here or default message",
+    "response": null or real respone
+> }
+- Và thế là chúng ta có:
+    - **response.util.ts**: Cung cấp class **ApiResponseBuilder** và interface **ApiResponse** để xây dựng response mẫu { success, message, response } với message mặc định hoặc tùy chỉnh cho tất cả API.
+    - **http-exception.filter.ts**: Bắt và định dạng các lỗi HTTP (như HttpException) thành response chuẩn { success: false, message, response } để đảm bảo xử lý lỗi thống nhất.
+    - **response.interceptor.ts**: Tự động gói dữ liệu trả về của các API vào định dạng **ApiResponse**, áp dụng message mặc định nếu service không cung cấp response mẫu.
+    ##### Lưu ý nhớ call trong main để gọi cục bộ toàn ứng dụng nhé!
