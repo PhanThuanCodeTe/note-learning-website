@@ -51,7 +51,3 @@ Tôi muốn api trả về phải đẹp mắt nên tôi cực, và bạn cũng 
 - Cập nhật controller để xử lý avatar (bạn chọn file mà nên phải dùng form data thôi)
 - Cập nhật **user.module** để sử dụng **cloudinary.module**.
 - Thư mục uploads để nhận và chuyển ảnh lên cloudinary. sao đó có util xóa file tạm.
-
-
-
-
