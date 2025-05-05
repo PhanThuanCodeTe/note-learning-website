@@ -8,7 +8,7 @@ import { ApiResponse, api } from 'src/common/utils/response.util';
 
 @Injectable()
 export class UsersService {
-  constructor(
+  constructor( // constructor
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -16,7 +16,7 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto): Promise<ApiResponse> {
     const { email, password, full_name, avatar_url } = createUserDto;
 
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({ where: { email } }); // check mail if it exist res back
     if (existingUser) {
       return api()
         .setError('Email already exists')
@@ -38,9 +38,9 @@ export class UsersService {
       email: newUser.email,
       full_name: newUser.full_name,
       avatar_url: newUser.avatar_url,
-    };
+    }; // return exact column not all
 
-    return api()
+    return api() // api respone
       .setMessage('User created successfully')
       .setResponse(responseRegisteredUser)
       .build();

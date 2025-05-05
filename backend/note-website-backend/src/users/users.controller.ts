@@ -9,30 +9,30 @@ import { removeFile } from 'src/common/utils/file.util';
 import * as multer from 'multer';
 
 @Controller('users')
-export class UsersController {
+export class UsersController { // constructor
   constructor(
     private readonly usersService: UsersService,
     private readonly cloudinaryConfig: CloudinaryConfig,
   ) {}
 
-  @Post('register')
-  @UseInterceptors(
+  @Post('register') //endpoint
+  @UseInterceptors( // use to handle file upload
     FileInterceptor('avatar', {
-      storage: multer.diskStorage({
-        destination: './uploads',
+      storage: multer.diskStorage({ // config for multer
+        destination: './uploads', // folder to save image
         filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const fileExt = file.originalname.split('.').pop();
-          cb(null, `${file.fieldname}-${uniqueSuffix}.${fileExt}`);
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9); // generate unique name
+          const fileExt = file.originalname.split('.').pop(); // get file extension
+          cb(null, `${file.fieldname}-${uniqueSuffix}.${fileExt}`); // save file with unique name 
         },
       }),
       limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
       },
       fileFilter: (req, file, cb) => {
-        // Kiểm tra MIME type thay vì chỉ đuôi file
+        // check if file is image
         if (!file.mimetype.match(/^image\/(jpeg|png|gif|jpg)$/)) {
-          return cb(new BadRequestException('Only image files (jpg, jpeg, png, gif) are allowed!'), false);
+          return cb(new BadRequestException('Only image files (jpg, jpeg, png, gif) are allowed!'), false); // throw exception
         }
         cb(null, true);
       },
@@ -45,7 +45,7 @@ export class UsersController {
     try {
       let avatarUrl = createUserDto.avatar_url;
 
-      // Xử lý avatar nếu được upload
+      // If have avatar in request
       if (avatar) {
         try {
           const uploadResult = await this.cloudinaryConfig.uploadImage(avatar);
@@ -53,17 +53,17 @@ export class UsersController {
         } catch (error) {
           throw new BadRequestException(`Upload failed: ${error.message}`);
         } finally {
-          // Xóa file tạm sau khi upload
+          // Delete temp avatar in upload
           if (avatar.path) {
             removeFile(avatar.path);
           }
         }
       } else if (!avatarUrl) {
-        // Tạo avatar mặc định nếu không có avatar được upload và không có avatar_url
+        // Create sample avatar url if dont have avatar or link in request
         avatarUrl = generateDefaultAvatar();
       }
 
-      // Tạo đối tượng CreateUserDto mới với avatar_url đã được xử lý
+      // Add sample avatar url to CreateUserDto 
       const userDataToSave = {
         ...createUserDto,
         avatar_url: avatarUrl,
