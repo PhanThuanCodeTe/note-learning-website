@@ -1,4 +1,4 @@
-import { Controller, Body, Post, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Body, Post, UseInterceptors, UploadedFile, BadRequestException, Get, UseGuards, Req } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -7,6 +7,8 @@ import { CloudinaryConfig } from 'src/config/cloudinary.config';
 import { generateDefaultAvatar } from 'src/common/utils/avatar.util';
 import { removeFile } from 'src/common/utils/file.util';
 import * as multer from 'multer';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController { // constructor
@@ -73,5 +75,25 @@ export class UsersController { // constructor
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  @Post('login') // /users/login
+  async login(@Body() loginDto: { email: string; password: string }): Promise<ApiResponse> {
+    try {
+      // We'll implement this in our Auth service
+      return await this.usersService.login(loginDto.email, loginDto.password);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('info') // /users/info
+  @UseGuards(AuthGuard('jwt')) // Use JWT authentication guard
+  async getUserInfo(@Req() req: Request): Promise<ApiResponse> { // this method will be called when the user is authenticated
+    const user = req.user;
+    if (!user) {
+      throw new BadRequestException('User not found in request');
+    }
+    return this.usersService.getUserInfo(user['id']);
   }
 }

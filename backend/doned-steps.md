@@ -50,7 +50,20 @@ Tôi muốn api trả về phải đẹp mắt nên tôi cực, và bạn cũng 
 - Tạo util cho avatar mặc định (Tôi muốn khi người dùng không send avatar thì sẽ có 1 url avatar mặc định)
 - Cập nhật controller để xử lý avatar (bạn chọn file mà nên phải dùng form data thôi)
 - Cập nhật **user.module** để sử dụng **cloudinary.module**.
-- Thư mục uploads để nhận và chuyển ảnh lên cloudinary. sao đó có util xóa file tạm.
+- Thư mục uploads để nhận và chuyển ảnh lên cloudinary. Sao đó có util xóa file tạm.
+## Chức năng login dùng JWT
+- Cài đặt các package cần thiết.
+> npm install @nestjs/jwt passport passport-jwt @nestjs/passport
+- Thêm vào file **.env** biến môi trường.
+- Tạo **Auth Module, Controller, Service**
+> nest generate module auth
+> nest generate controller auth
+> nest generate service auth
+- Cập nhật **users.module**
+- Cập nhật **users.service**
+- Tạo và cấu hình **jwt.strategy** để xác thực JWT token từ Authorization header
+- Tạo và cấu hình **jwt-auth.guard** để bảo vệ các route cần xác thực
+- Cập nhật **users.controller**
 
 
 
