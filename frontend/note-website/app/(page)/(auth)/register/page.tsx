@@ -3,6 +3,8 @@
 import { TextField, Button, Typography, Paper, Box } from '@mui/material';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ROUTES from '@/app/common/constants/routes';
+import styles from '@/app/styles/style.module.scss';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -69,11 +71,11 @@ export default function RegisterPage() {
   };
 
   const handleLogin = () => {
-    router.push('/login');
+    router.push(ROUTES.LOGIN);
   };
 
   return (
-    <Box className="min-h-screen flex items-center justify-center p-4">
+    <Box className={`min-h-screen flex items-center justify-center p-4 ${styles.formAnimation}`}>
       <Paper
         elevation={6}
         className={`p-6 rounded-xl w-full max-w-md relative ${
@@ -91,9 +93,10 @@ export default function RegisterPage() {
         )}
         <Typography
           variant="h5"
-          className="text-center font-bold"
+          className="text-center font-bold "
+          gutterBottom sx={{ fontWeight: 'bold' }}
         >
-          Đăng ký
+          Sign up
         </Typography>
         <Box
           component="form"

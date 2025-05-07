@@ -1,19 +1,21 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import ROUTES from "../common/constants/routes";
 
 const NavBar = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogin = () => {
-    router.push("/login");
+    router.push(ROUTES.LOGIN);
   };
 
   const handleHome = () => {
-    router.push("/home");
+    router.push(ROUTES.HOME);
   };
 
   return (
@@ -59,13 +61,17 @@ const NavBar = () => {
         />
       </div>
 
-      {/* Login button */}
-      <button
-        onClick={handleLogin}
-        className="bg-white text-gray-700 font-medium px-4 py-1.5 rounded-full border border-gray-300 shadow-sm hover:shadow-md hover:text-blue-600 transition duration-200"
-      >
-        Login
-      </button>
+      {/* Login button or empty div with same size */}
+      <div className="w-[100px] flex justify-end">
+        {pathname !== ROUTES.LOGIN && (
+          <button
+            onClick={handleLogin}
+            className="bg-white text-gray-700 font-medium px-4 py-1.5 rounded-full border border-gray-300 shadow-sm hover:shadow-md hover:text-blue-600 transition duration-200"
+          >
+            Login
+          </button>
+        )}
+      </div>
     </nav>
   );
 };

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useRouter } from "next/navigation";
 import styles from '@/app/styles/style.module.scss';
+import ROUTES from '@/app/common/constants/routes';
 
 function SignInForm({ onForgotPassword }: { onForgotPassword: () => void }) {
   return (
@@ -51,11 +52,11 @@ function SignInPage() {
   const router = useRouter();
 
   const handleRegister = () => {
-    router.push("/register");
+    router.push(ROUTES.REGISTER);
   };
 
   const handleForgotPassword = () => {
-    router.push("/login/forgot");
+    router.push(ROUTES.FORGOT_PASSWORD);
   };
 
 
@@ -70,7 +71,7 @@ function SignInPage() {
         px: 2,
       }}
     >
-      <Paper elevation={8} sx={{ width: '100%', maxWidth: 400, p: 4, borderRadius: 3 }} className={styles.formAnimation}>
+      <Paper elevation={8} sx={{ width: '100%', maxWidth: 400, p: 4, borderRadius: 2 }} className={styles.formAnimation}>
         <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
           Sign in
         </Typography>
