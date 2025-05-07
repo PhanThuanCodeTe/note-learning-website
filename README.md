@@ -37,13 +37,12 @@
 
 ### Chức năng dự kiến được hoàn thành ở Backend:
 - Đăng ký và đăng nhập tài khoản truyền thống xác thực bằng JWT.
-- Gửi email về khi đăng ký, quên tài khoản – mật khẩu.
 - Create dữ liệu của tài liệu lên server (tối đa 5 tài liệu cho mỗi tài khoản).
 - CRUD các tag cho các tài liệu.
 - CRUD các note cho tài liệu
 
 ### Chức năng dự kiến được hoàn thành ở Frontend:
-- Màn hình đăng ký – đăng nhập – quên mật khẩu.
+- Màn hình đăng ký – đăng nhập.
 - Màn hình Dashboard.
 - Hiện được tài liệu lên trang chính để xem trước. Thêm nút lưu tài liệu mới lưu về server.
 - Thêm tag cho tài liệu khi lưu
