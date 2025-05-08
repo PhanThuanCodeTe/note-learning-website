@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import ROUTES from '@/app/common/constants/routes';
 import ENDPOINTS from '@/app/common/constants/endpoints';
 import apiClient from '@/app/common/utils/apiClient';
-import notificationService from '@/app/common/services/notificationService';
+import Message from '@/app/components/Message';
 import styles from '@/app/styles/style.module.scss';
 
 export default function RegisterPage() {
@@ -22,11 +22,11 @@ export default function RegisterPage() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user types
     setError(null);
   };
 
@@ -34,7 +34,7 @@ export default function RegisterPage() {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (file.size > 5 * 1024 * 1024) {
-        notificationService.error('File size exceeds 5MB limit');
+        setMessage({ text: 'File size exceeds 5MB limit', type: 'error' });
         return;
       }
       setAvatarFile(file);
@@ -55,14 +55,14 @@ export default function RegisterPage() {
       const file = e.dataTransfer.files[0];
       if (file.type.startsWith('image/')) {
         if (file.size > 5 * 1024 * 1024) {
-          notificationService.error('File size exceeds 5MB limit');
+          setMessage({ text: 'File size exceeds 5MB limit', type: 'error' });
           return;
         }
         setAvatarFile(file);
         const previewUrl = URL.createObjectURL(file);
         setAvatarPreview(previewUrl);
       } else {
-        notificationService.error('Please upload an image file');
+        setMessage({ text: 'Please upload an image file', type: 'error' });
       }
     }
   };
@@ -81,9 +81,6 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      console.log('Starting registration process');
-      
-      // Using FormData to handle both text fields and file upload
       const formDataToSend = new FormData();
       formDataToSend.append('email', formData.email);
       formDataToSend.append('password', formData.password);
@@ -95,13 +92,9 @@ export default function RegisterPage() {
 
       let response;
       
-      // If we have a file, use the formData upload method
       if (avatarFile) {
-        console.log('Uploading with avatar');
         response = await apiClient.uploadFile(ENDPOINTS.USER.REGISTER, formDataToSend);
       } else {
-        // Otherwise use the standard JSON approach
-        console.log('Registering without avatar');
         response = await apiClient.post(ENDPOINTS.USER.REGISTER, {
           email: formData.email,
           password: formData.password,
@@ -109,20 +102,19 @@ export default function RegisterPage() {
         });
       }
 
-      console.log('Registration response:', response);
-
       if (response.success) {
-        notificationService.success('Registration successful!');
-        router.push(ROUTES.LOGIN);
+        setMessage({ text: 'Registration successful!', type: 'success' });
+        setTimeout(() => {
+          router.push(ROUTES.LOGIN);
+        }, 1500);
       } else {
         setError(response.message || 'Registration failed');
-        notificationService.error(response.message || 'Registration failed');
+        setMessage({ text: response.message || 'Registration failed', type: 'error' });
       }
     } catch (error: any) {
-      console.error('Registration error:', error);
       const errorMessage = error.message || 'An unexpected error occurred';
       setError(errorMessage);
-      notificationService.error(errorMessage);
+      setMessage({ text: errorMessage, type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +126,13 @@ export default function RegisterPage() {
 
   return (
     <Box className={`min-h-screen flex items-center justify-center p-4 ${styles.formAnimation}`}>
+      {message && (
+        <Message 
+          message={message.text}
+          type={message.type}
+          onClose={() => setMessage(null)}
+        />
+      )}
       <Paper
         elevation={6}
         className={`p-6 rounded-xl w-full max-w-md relative ${
