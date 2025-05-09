@@ -19,7 +19,6 @@ class ApiClient {
   constructor() {
     // Fix for potential undefined API_URL
     this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-    console.log('API base URL:', this.baseUrl);
   }
 
   /**

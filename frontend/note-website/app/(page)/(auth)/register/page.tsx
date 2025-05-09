@@ -21,20 +21,23 @@ export default function RegisterPage() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [apiResponse, setApiResponse] = useState<any>(null);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    setError(null);
+    // Clear any previous response messages when user makes changes
+    setApiResponse(null);
   };
 
   const handleAvatarChange = (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (file.size > 5 * 1024 * 1024) {
-        setMessage({ text: 'File size exceeds 5MB limit', type: 'error' });
+        setApiResponse({ 
+          success: false, 
+          message: 'File size exceeds 5MB limit'
+        });
         return;
       }
       setAvatarFile(file);
@@ -55,14 +58,20 @@ export default function RegisterPage() {
       const file = e.dataTransfer.files[0];
       if (file.type.startsWith('image/')) {
         if (file.size > 5 * 1024 * 1024) {
-          setMessage({ text: 'File size exceeds 5MB limit', type: 'error' });
+          setApiResponse({ 
+            success: false, 
+            message: 'File size exceeds 5MB limit'
+          });
           return;
         }
         setAvatarFile(file);
         const previewUrl = URL.createObjectURL(file);
         setAvatarPreview(previewUrl);
       } else {
-        setMessage({ text: 'Please upload an image file', type: 'error' });
+        setApiResponse({ 
+          success: false, 
+          message: 'Please upload an image file'
+        });
       }
     }
   };
@@ -78,7 +87,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
+    setApiResponse(null);
 
     try {
       const formDataToSend = new FormData();
@@ -102,19 +111,20 @@ export default function RegisterPage() {
         });
       }
 
+      // Store the complete API response
+      setApiResponse(response);
+
       if (response.success) {
-        setMessage({ text: 'Registration successful!', type: 'success' });
         setTimeout(() => {
           router.push(ROUTES.LOGIN);
         }, 1500);
-      } else {
-        setError(response.message || 'Registration failed');
-        setMessage({ text: response.message || 'Registration failed', type: 'error' });
       }
     } catch (error: any) {
-      const errorMessage = error.message || 'An unexpected error occurred';
-      setError(errorMessage);
-      setMessage({ text: errorMessage, type: 'error' });
+      // Handle unexpected errors that don't come from the API
+      setApiResponse({ 
+        success: false, 
+        message: error.message || 'An unexpected error occurred'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -126,11 +136,10 @@ export default function RegisterPage() {
 
   return (
     <Box className={`min-h-screen flex items-center justify-center p-4 ${styles.formAnimation}`}>
-      {message && (
+      {apiResponse && (
         <Message 
-          message={message.text}
-          type={message.type}
-          onClose={() => setMessage(null)}
+          apiResponse={apiResponse}
+          onClose={() => setApiResponse(null)}
         />
       )}
       <Paper
@@ -155,12 +164,6 @@ export default function RegisterPage() {
         >
           Sign up
         </Typography>
-        
-        {error && (
-          <Typography color="error" className="text-center mb-4">
-            {error}
-          </Typography>
-        )}
         
         <Box
           component="form"

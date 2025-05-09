@@ -1,14 +1,26 @@
 import { useEffect, useState } from 'react';
 
-interface MessageProps {
+interface ApiResponse {
+  success: boolean;
   message: string;
-  type: 'success' | 'error' | 'info';
-  duration?: number;
-  onClose?: () => void;
+  response?: any;
 }
 
-const Message = ({ message, type, duration = 3000, onClose }: MessageProps) => {
+interface MessageProps {
+  apiResponse: ApiResponse;
+  duration?: number;
+  onClose?: () => void;
+  customMessage?: string; // Optional custom message to override API message
+}
+
+const Message = ({ apiResponse, duration = 3000, onClose, customMessage }: MessageProps) => {
   const [isVisible, setIsVisible] = useState(true);
+  
+  // Determine message type based on API response success flag
+  const type = apiResponse.success ? 'success' : 'error';
+  
+  // Use custom message if provided, otherwise use API message
+  const messageText = customMessage || apiResponse.message;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,9 +41,9 @@ const Message = ({ message, type, duration = 3000, onClose }: MessageProps) => {
 
   return (
     <div className={`fixed top-4 right-4 p-4 rounded-lg text-white ${bgColor} shadow-lg z-50`}>
-      {message}
+      {messageText}
     </div>
   );
 };
 
-export default Message; 
+export default Message;
