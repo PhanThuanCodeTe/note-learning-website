@@ -1,58 +1,25 @@
-import { toast } from 'react-toastify'; // Giả sử bạn sử dụng react-toastify
+import { toast } from 'react-toastify';
 
-interface NotificationOptions {
-  autoClose?: number;
-  position?: 'top-right' | 'top-center' | 'top-left' | 'bottom-right' | 'bottom-center' | 'bottom-left';
-  hideProgressBar?: boolean;
-}
-
-const defaultOptions: NotificationOptions = {
+const defaultOptions = {
   autoClose: 3000,
-  position: 'top-right',
+  position: 'top-right' as const,
   hideProgressBar: false,
 };
 
-class NotificationService {
-  /**
-   * Hiển thị thông báo thành công
-   */
-  success(message: string, options?: NotificationOptions) {
-    toast.success(message, { ...defaultOptions, ...options });
-  }
-
-  /**
-   * Hiển thị thông báo lỗi
-   */
-  error(message: string, options?: NotificationOptions) {
-    toast.error(message, { ...defaultOptions, ...options });
-  }
-
-  /**
-   * Hiển thị thông báo cảnh báo
-   */
-  warning(message: string, options?: NotificationOptions) {
-    toast.warning(message, { ...defaultOptions, ...options });
-  }
-
-  /**
-   * Hiển thị thông báo thông tin
-   */
-  info(message: string, options?: NotificationOptions) {
-    toast.info(message, { ...defaultOptions, ...options });
-  }
-
-  /**
-   * Xử lý hiển thị thông báo từ API response
-   */
-  handleApiResponse(success: boolean, message: string) {
+export const notificationService = {
+  success: (message: string) => toast.success(message, defaultOptions),
+  error: (message: string) => toast.error(message, defaultOptions),
+  warning: (message: string) => toast.warning(message, defaultOptions),
+  info: (message: string) => toast.info(message, defaultOptions),
+  
+  // Helper method để xử lý API response
+  handleApiResponse: (success: boolean, message: string) => {
     if (success) {
-      this.success(message);
+      toast.success(message, defaultOptions);
     } else {
-      this.error(message);
+      toast.error(message, defaultOptions);
     }
   }
-}
+};
 
-// Singleton instance
-const notificationService = new NotificationService();
 export default notificationService;

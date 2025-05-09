@@ -1,6 +1,7 @@
-// src/utils/apiClient.ts
+// frontend/note-website/app/common/utils/apiClient.ts
+import { getCookie } from './cookieUtils';
 
-interface ApiResponse<T = any> {
+export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
   response: T;
@@ -39,6 +40,9 @@ class ApiClient {
     
     console.log(`Making ${method} request to: ${url}`);
     
+    // Get access token from cookies if available
+    const accessToken = getCookie('accessToken');
+    
     // Xây dựng request options
     const requestOptions: RequestInit = {
       method,
@@ -48,6 +52,14 @@ class ApiClient {
       },
       credentials: 'include', // Để gửi cookies nếu cần (authentication)
     };
+    
+    // Add authorization header if token exists and not already provided
+    if (accessToken && !headers['Authorization']) {
+      requestOptions.headers = {
+        ...requestOptions.headers,
+        'Authorization': `Bearer ${accessToken}`,
+      };
+    }
     
     // Thêm body nếu không phải GET request
     if (method !== 'GET' && body) {
@@ -136,11 +148,19 @@ class ApiClient {
   
   // Method for handling file uploads
   async uploadFile<T>(endpoint: string, formData: FormData): Promise<ApiResponse<T>> {
+    // Get access token from cookies if available
+    const accessToken = getCookie('accessToken');
+    
+    const headers: Record<string, string> = {};
+    
+    // Add authorization header if token exists
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    
     return this.endpoint<T>(endpoint, {
       method: 'POST',
-      headers: {
-        // Don't set Content-Type as the browser will set it with the boundary parameter
-      },
+      headers,
       body: formData
     });
   }

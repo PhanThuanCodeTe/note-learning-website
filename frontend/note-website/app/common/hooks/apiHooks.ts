@@ -8,46 +8,43 @@ import { ApiResponse } from '../types/api'; // Giả sử bạn có file định
  */
 export function useApi<T, P = any>(
   apiFunction: (params: P) => Promise<ApiResponse<T>>,
-  showNotifications = true,
+  showNotifications = true
 ) {
   const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const execute = useCallback(
-    async (params: P): Promise<T | null> => {
-      try {
-        setLoading(true);
-        setError(null);
+  const execute = useCallback(async (params: P) => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const result = await apiFunction(params);
+      const result = await apiFunction(params);
 
-        if (result.success) {
-          setData(result.response);
-          if (showNotifications) {
-            notificationService.success(result.message);
-          }
-          return result.response;
-        } else {
-          setError(result.message);
-          if (showNotifications) {
-            notificationService.error(result.message);
-          }
-          return null;
-        }
-      } catch (err: any) {
-        const errorMessage = err.message || 'Đã xảy ra lỗi không xác định';
-        setError(errorMessage);
+      if (result.success) {
+        setData(result.response);
         if (showNotifications) {
-          notificationService.error(errorMessage);
+          notificationService.success(result.message);
+        }
+        return result.response;
+      } else {
+        setError(result.message);
+        if (showNotifications) {
+          notificationService.error(result.message);
         }
         return null;
-      } finally {
-        setLoading(false);
       }
-    },
-    [apiFunction, showNotifications]
-  );
+    } catch (err: any) {
+      const errorMessage = err.message || 'Đã xảy ra lỗi không xác định';
+      setError(errorMessage);
+      if (showNotifications) {
+        notificationService.error(errorMessage);
+      }
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [apiFunction, showNotifications]);
 
   return { data, loading, error, execute };
 }

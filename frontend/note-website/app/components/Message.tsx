@@ -7,20 +7,28 @@ interface ApiResponse {
 }
 
 interface MessageProps {
-  apiResponse: ApiResponse;
+  apiResponse?: ApiResponse;
+  message?: string;
+  type?: 'success' | 'error' | 'info';
   duration?: number;
   onClose?: () => void;
-  customMessage?: string; // Optional custom message to override API message
 }
 
-const Message = ({ apiResponse, duration = 3000, onClose, customMessage }: MessageProps) => {
+const Message = ({ apiResponse, message, type, duration = 3000, onClose }: MessageProps) => {
   const [isVisible, setIsVisible] = useState(true);
   
-  // Determine message type based on API response success flag
-  const type = apiResponse.success ? 'success' : 'error';
+  // Determine message type based on API response or prop
+  let messageType = type;
+  let messageText = message;
   
-  // Use custom message if provided, otherwise use API message
-  const messageText = customMessage || apiResponse.message;
+  if (apiResponse) {
+    messageType = apiResponse.success ? 'success' : 'error';
+    messageText = apiResponse.message;
+  }
+  
+  if (!messageType) {
+    messageType = 'info';
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -31,13 +39,13 @@ const Message = ({ apiResponse, duration = 3000, onClose, customMessage }: Messa
     return () => clearTimeout(timer);
   }, [duration, onClose]);
 
-  if (!isVisible) return null;
+  if (!isVisible || !messageText) return null;
 
   const bgColor = {
     success: 'bg-green-500',
     error: 'bg-red-500',
     info: 'bg-blue-500',
-  }[type];
+  }[messageType];
 
   return (
     <div className={`fixed top-4 right-4 p-4 rounded-lg text-white ${bgColor} shadow-lg z-50`}>
