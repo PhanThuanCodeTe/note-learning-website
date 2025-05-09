@@ -64,7 +64,7 @@ Tôi muốn api trả về phải đẹp mắt nên tôi cực, và bạn cũng 
 - Tạo và cấu hình **jwt.strategy** để xác thực JWT token từ Authorization header
 - Tạo và cấu hình **jwt-auth.guard** để bảo vệ các route cần xác thực
 - Cập nhật **users.controller**
-
+##  Tiếp tục với tag, dociment
 
 
 

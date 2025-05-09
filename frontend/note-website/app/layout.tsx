@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/app/components/nav-bar"
+import CustomDrawer from "@/app/components/FolderDrawer";
+import RightDrawer from "@/app/components/GroupDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,12 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" className="h-full">
       <head>
+        {/* Optional: Add meta tags or other head content */}
       </head>
-      <body>
+      <body className="h-full overflow-hidden m-0 p-0 flex flex-col">
         <NavBar />
-        <main className="bg-gradient-to-r from-sky-100 via-indigo-250 to-purple-400 min-h-screen">{children}</main>
+        <main className="flex-1 bg-gradient-to-r from-sky-100 via-indigo-250 to-purple-400 overflow-hidden">
+          <CustomDrawer>
+            <RightDrawer>{children}</RightDrawer>
+          </CustomDrawer>
+        </main>
       </body>
     </html>
   );
