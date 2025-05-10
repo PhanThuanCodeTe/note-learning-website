@@ -108,7 +108,7 @@
 Lưu dữ liệu của user trong website full name là Biệt danh chứ không phải họ tên, người dùng có thể đặt tùy ý, sau này AI sẽ phân tích tên để tránh đặt các từ ngữ nhạy cảm.
 
 ## Documents (id, user_id, title, description, file_url, file_type, file_size, is_public, created_at, updated_at)
-Tài liệu học tập, tất cả các loại file .doc, .xlsx, .pdf, .pptx, .mp4, .mp3, .jpg, .png, …
+Tài liệu học tập, tất cả các loại file .pdf, .mp4, .mp3, .jpg, .png, …
 Nếu is_public = 1 người khác có thể search thấy bằng title.
 
 ## Notes (id, user_id, document_id, title, content, is_public, created_at, updated_at)
