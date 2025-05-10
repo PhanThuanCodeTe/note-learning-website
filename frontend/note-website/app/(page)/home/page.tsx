@@ -3,6 +3,9 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Message from '@/app/components/Message';
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import Button from '@mui/material/Button';
 
 interface UploadedFile {
   id: string;
@@ -28,7 +31,7 @@ export default function HomePage() {
         type: newFile.type,
         url: URL.createObjectURL(newFile),
       });
-      setMessage({ text: 'Tải lên thành công!', type: 'success' });
+      setMessage({ text: 'File uploaded!', type: 'success' });
     }
   }, []);
 
@@ -74,7 +77,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="h-screen w-full relative">
+    <div className="h-screen w-full relative p-4">
       {!file ? (
         <div
           {...getRootProps()}
@@ -84,20 +87,29 @@ export default function HomePage() {
         >
           <input {...getInputProps()} />
           <p className="text-xl font-semibold">
-            {isDragActive ? 'Thả file vào đây...' : 'Kéo thả file vào đây hoặc nhấp để chọn file'}
+            {isDragActive ? 'Drag file here...' : 'Drag or click here to see your file preview'}
           </p>
-          <p>PDF, Hình ảnh, Video, Âm thanh</p>
+          <p>PDF, Image, Video, Audio</p>
         </div>
       ) : (
         <div className="h-full w-full p-2 flex flex-col">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-2">
             <h3 className="text-xl font-semibold">{file.name}</h3>
-            <button
-              onClick={() => setFile(null)}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Xóa file
-            </button>
+            <div className="flex">
+            <Button
+               variant="contained"
+               color="info">
+                <SaveIcon className='mr-2' />
+               Save
+            </Button>
+            <Button onClick={() => setFile(null)}
+               variant="contained"
+               color="error"
+               sx={{ ml: 2 }}>
+                <CloseIcon className='mr-2' />
+               Close
+            </Button>
+            </div>
           </div>
           <div className="flex-1">{renderFilePreview(file)}</div>
         </div>

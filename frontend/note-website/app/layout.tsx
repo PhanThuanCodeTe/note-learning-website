@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/app/components/nav-bar"
+import NavBar from "@/app/components/NavBar"
 import CustomDrawer from "@/app/components/FolderDrawer";
 import RightDrawer from "@/app/components/GroupDrawer";
 

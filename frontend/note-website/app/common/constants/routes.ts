@@ -4,6 +4,7 @@ const ROUTES = {
     DASHBOARD: '/dashboard',
     FORGOT_PASSWORD: '/login/forgot',
     REGISTER: '/register',
+    INFO: '/info',
     // thêm route khác ở đây
   };
   

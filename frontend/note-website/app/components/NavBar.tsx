@@ -1,13 +1,27 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { TextField, InputAdornment, Avatar, Menu, MenuItem, Popover, Box, Typography, Button } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  Avatar,
+  Menu,
+  MenuItem,
+  Popover,
+  Box,
+  Typography,
+  Button,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ROUTES from "../common/constants/routes";
 import ENDPOINTS from "../common/constants/endpoints";
 import apiClient from "../common/utils/apiClient";
-import { getCookie, deleteCookie, hasCookie } from "../common/utils/cookieUtils";
+import {
+  getCookie,
+  deleteCookie,
+  hasCookie,
+} from "../common/utils/cookieUtils";
 
 interface UserInfo {
   id: string;
@@ -30,31 +44,31 @@ const NavBar = () => {
     // Check if user is logged in and fetch user info
     const fetchUserInfo = async () => {
       setLoading(true);
-      
+
       try {
         // Check if there is an access token
-        if (!hasCookie('accessToken')) {
+        if (!hasCookie("accessToken")) {
           setLoading(false);
           return;
         }
-        
+
         // Add token to headers for the request
-        const token = getCookie('accessToken');
+        const token = getCookie("accessToken");
         const response = await apiClient.endpoint(ENDPOINTS.USER.INFO, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
-        
+
         if (response.success) {
           setUser(response.response as UserInfo);
         } else {
           // If token is invalid, clear it
-          deleteCookie('accessToken');
+          deleteCookie("accessToken");
         }
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error("Error fetching user info:", error);
       } finally {
         setLoading(false);
       }
@@ -80,7 +94,7 @@ const NavBar = () => {
   };
 
   const handleLogout = () => {
-    deleteCookie('accessToken');
+    deleteCookie("accessToken");
     setUser(null);
     handleMenuClose();
     router.push(ROUTES.HOME);
@@ -89,7 +103,7 @@ const NavBar = () => {
   const handleUserDetails = () => {
     handleMenuClose();
     // Can add link to user profile page here
-    // router.push(ROUTES.PROFILE);
+    router.push(ROUTES.INFO);
   };
 
   return (
@@ -145,14 +159,14 @@ const NavBar = () => {
               src={user.avatar_url}
               alt={user.full_name}
               onClick={handleAvatarClick}
-              sx={{ 
-                width: 40, 
-                height: 40, 
-                cursor: 'pointer',
-                border: '2px solid #e0e0e0',
-                '&:hover': {
-                  boxShadow: '0 0 8px rgba(0,0,0,0.2)'
-                }
+              sx={{
+                width: 40,
+                height: 40,
+                cursor: "pointer",
+                border: "2px solid #e0e0e0",
+                "&:hover": {
+                  boxShadow: "0 0 8px rgba(0,0,0,0.2)",
+                },
               }}
             />
             <Menu
@@ -160,16 +174,16 @@ const NavBar = () => {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: "bottom",
+                horizontal: "right",
               }}
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
             >
               <Box sx={{ px: 2, py: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                   {user.full_name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
@@ -180,13 +194,30 @@ const NavBar = () => {
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
-        ) : pathname !== ROUTES.LOGIN && (
-          <button
-            onClick={handleLogin}
-            className="bg-white text-gray-700 font-medium px-4 py-1.5 rounded-full border border-gray-300 shadow-sm hover:shadow-md hover:text-blue-600 transition duration-200"
-          >
-            Login
-          </button>
+        ) : (
+          pathname !== ROUTES.LOGIN && (
+            <Button
+              onClick={handleLogin}
+              variant="outlined"
+              sx={{
+                color: "grey",
+                borderColor: "grey.300",
+                fontWeight: "bold",
+                px: 2,
+                py: 1,
+                boxShadow: 1,
+                textTransform: "none",
+                transition: "all 0.2s",
+                "&:hover": {
+                  boxShadow: 2,
+                  color: "primary.main",
+                  borderColor: "grey.300",
+                },
+              }}
+            >
+              Login
+            </Button>
+          )
         )}
       </div>
     </nav>
