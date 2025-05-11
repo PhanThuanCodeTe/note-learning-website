@@ -8,60 +8,61 @@ import { UpdateDocumentDto } from './dto/update-document.dto';
 
 @Injectable()
 export class DocumentsService {
-    constructor(
-        @InjectRepository(Document)
-        private readonly documentRepository: Repository<Document>,
-    ) {}
-    async createDocument(createDocumentDto: CreateDocumentDto): Promise<ApiResponse> {
-        const document = this.documentRepository.create(createDocumentDto);
-        const newDocument = await this.documentRepository.save(document);
-        
-        return api()
-          .setMessage('Document uploaded successfully!')
-          .setResponse(newDocument)
-          .build();
-      }
+  constructor(
+    @InjectRepository(Document)
+    private readonly documentRepository: Repository<Document>,
+  ) {}
 
-      async findAllByUserId(userId: string): Promise<ApiResponse> {
-        const documents = await this.documentRepository.find({
-          where: { user_id: userId },
-          order: { created_at: 'DESC' },
-        });
+  async createDocument(documentData: any): Promise<ApiResponse> {
+    const document = this.documentRepository.create(documentData);
+    const newDocument = await this.documentRepository.save(document);
     
-        return api()
-          .setMessage('Documents retrieved successfully')
-          .setResponse(documents)
-          .build();
-      }
+    return api()
+      .setMessage('Document uploaded successfully!')
+      .setResponse(newDocument)
+      .build();
+  }
 
-      async findAllPublic(): Promise<ApiResponse> {
-        const documents = await this.documentRepository.find({
-          where: { is_public: true },
-          order: { created_at: 'DESC' },
-        });
-    
-        return api()
-          .setMessage('Public documents retrieved successfully')
-          .setResponse(documents)
-          .build();
-      }
+  async findAllByUserId(userId: string): Promise<ApiResponse> {
+    const documents = await this.documentRepository.find({
+      where: { user_id: userId },
+      order: { created_at: 'DESC' },
+    });
 
-      async findOne(id: string): Promise<ApiResponse> {
-        const document = await this.documentRepository.findOne({
-          where: { id },
-        });
-    
-        if (!document) {
-          throw new NotFoundException(`Document with ID ${id} not found`);
-        }
-    
-        return api()
-          .setMessage('Document retrieved successfully')
-          .setResponse(document)
-          .build();
-      }
+    return api()
+      .setMessage('Documents retrieved successfully')
+      .setResponse(documents)
+      .build();
+  }
 
-       // This method returns the raw document entity for internal checks
+  async findAllPublic(): Promise<ApiResponse> {
+    const documents = await this.documentRepository.find({
+      where: { is_public: true },
+      order: { created_at: 'DESC' },
+    });
+
+    return api()
+      .setMessage('Public documents retrieved successfully')
+      .setResponse(documents)
+      .build();
+  }
+
+  async findOne(id: string): Promise<ApiResponse> {
+    const document = await this.documentRepository.findOne({
+      where: { id },
+    });
+
+    if (!document) {
+      throw new NotFoundException(`Document with ID ${id} not found`);
+    }
+
+    return api()
+      .setMessage('Document retrieved successfully')
+      .setResponse(document)
+      .build();
+  }
+
+  // This method returns the raw document entity for internal checks
   async findOneRaw(id: string): Promise<Document | null> {
     return this.documentRepository.findOne({
       where: { id },

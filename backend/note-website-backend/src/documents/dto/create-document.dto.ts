@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsUrl, IsBoolean, IsNumber, IsUUID } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsUUID } from 'class-validator';
 
 export class CreateDocumentDto {
     @IsUUID()
@@ -13,18 +13,7 @@ export class CreateDocumentDto {
     @IsOptional()
     description?: string;
   
-    @IsNotEmpty()
-    file_url: string;
-  
-    @IsString()
-    @IsNotEmpty()
-    file_type: string;
-  
-    @IsNumber()
-    @IsNotEmpty()
-    file_size: number;
-  
     @IsBoolean()
     @IsOptional()
     is_public?: boolean;
-  }
+}

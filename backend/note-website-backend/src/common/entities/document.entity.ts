@@ -26,11 +26,11 @@ export class Document {
   @Column({ type: 'varchar', length: 50 })
   file_type: string;
 
-  @Column({ type: 'bigint' })
-  file_size: number;
-
   @Column({ type: 'boolean', default: false })
   is_public: boolean;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  public_id: string;  // Cloudinary public_id for deletion
 
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;

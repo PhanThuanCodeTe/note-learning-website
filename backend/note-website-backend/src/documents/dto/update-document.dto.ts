@@ -9,17 +9,6 @@ export class UpdateDocumentDto {
   @IsOptional()
   description?: string;
   
-  @IsString()
-  @IsOptional()
-  file_url?: string;
-  
-  @IsString()
-  @IsOptional()
-  file_type?: string;
-  
-  @IsOptional()
-  file_size?: number;
-  
   @IsBoolean()
   @IsOptional()
   is_public?: boolean;
