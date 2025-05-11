@@ -89,7 +89,7 @@ export class UsersController { // constructor
 
   @Get('info') // /users/info
   @UseGuards(AuthGuard('jwt')) // Use JWT authentication guard
-  async getUserInfo(@Req() req: Request): Promise<ApiResponse> { // this method will be called when the user is authenticated
+  async getUserInfo(@Req() req: Request): Promise<ApiResponse> {
     const user = req.user;
     if (!user) {
       throw new BadRequestException('User not found in request');

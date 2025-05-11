@@ -2,8 +2,8 @@ import { IsString, IsNotEmpty, IsOptional, IsUrl, IsBoolean, IsNumber, IsUUID } 
 
 export class CreateDocumentDto {
     @IsUUID()
-    @IsNotEmpty()
-    user_id: string;
+    @IsOptional()
+    user_id?: string;
   
     @IsString()
     @IsNotEmpty()
